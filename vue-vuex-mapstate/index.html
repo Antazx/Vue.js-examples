@@ -24,14 +24,12 @@
             template: /*html*/
                 `
             <div>
-                <h1>Parent {{numero}}</h1>
+                <h1>Parent {{number}}</h1>
                 <hijo></hijo>
             </div>
             `,
             computed: {
-                numero() {
-                    return store.state.number;
-                }
+                ...Vuex.mapState(['number'])
             }
         });
 
