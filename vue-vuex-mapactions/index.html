@@ -66,10 +66,12 @@
                 populateTechs(state, techActions) { state.techs = techActions; }
             },
             actions: {
+                //getTechs: async function ({commit}}) {
                 getTechs: async function (context) {
                     const data = await fetch('data.json');
                     const techs = await data.json();
                     context.commit('populateTechs', techs);
+                    //commit('populateTechs', techs);
                 }
             }
         });
