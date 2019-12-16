@@ -38,11 +38,15 @@
                 `
             <div>
                 <h1>Child {{number}}</h1>
-                <button @click="$store.commit('add')">+</button>
+                <button @click="add">+</button>
+                <button @click="sub(2)">-</button>
             </div>
             `,
             computed: {
                 ...Vuex.mapState(['number'])
+            },
+            methods: {
+                ...Vuex.mapMutations(['add', 'sub'])
             }
         });
 
@@ -51,7 +55,8 @@
                 number: 0
             },
             mutations: {
-                add(state) { state.number++ }
+                add(state) { state.number++; },
+                sub(state, n) { state.number -= n; }
             }
         });
 
