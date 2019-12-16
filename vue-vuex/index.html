@@ -35,7 +35,7 @@
                 `
             <div>
                 <h1>Child {{ $store.state.number}}</h1>
-                <button @click="{{ $store.commit('add')}}">+</button>
+                <button @click="$store.commit('add')">+</button>
             </div>
             `
         });
