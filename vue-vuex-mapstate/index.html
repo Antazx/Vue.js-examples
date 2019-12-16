@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="*">
+    <title>Vuex - mapState</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuex@3.1.2/dist/vuex.js"></script>
+</head>
+
+<body>
+
+    <div id="app">
+        <padre></padre>
+    </div>
+
+
+    <script>
+        Vue.component('padre', {
+            template: /*html*/
+                `
+            <div>
+                <h1>Parent {{numero}}</h1>
+                <hijo></hijo>
+            </div>
+            `,
+            computed: {
+                numero() {
+                    return store.state.number;
+                }
+            }
+        });
+
+        Vue.component('hijo', {
+            template: /*html*/
+                `
+            <div>
+                <h1>Child {{ $store.state.number}}</h1>
+                <button @click="$store.commit('add')">+</button>
+            </div>
+            `
+        });
+
+        const store = new Vuex.Store({
+            state: {
+                number: 0
+            },
+            mutations: {
+                add(state) { state.number++ }
+            }
+        });
+
+        new Vue({
+            el: '#app',
+            store,
+            data: { helloWorld: 'Hello world from Vue.js' },
+            methods: {},
+            computed: {}
+        });
+    </script>
+</body>
+
+</html>
