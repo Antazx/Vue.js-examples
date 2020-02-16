@@ -14,7 +14,8 @@ Vue.use(IconsPlugin);
 Vue.use(VueAxios, axios);
 Vue.config.productionTip = false;
 
-axios.defaults.baseURL = 'http://localhost:3000/api';
+//axios.defaults.baseURL = 'http://localhost:3030/api';
+axios.defaults.baseURL = 'https://app-mevn-restaurants.herokuapp.com/api';
 
 new Vue({
   router,

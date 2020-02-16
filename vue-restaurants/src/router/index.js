@@ -1,24 +1,18 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  },
-  {
-    path: '/restaurants',
     name: 'Restaurants',
     component: () => import(/* webpackChunkName: "about" */ '../views/Restaurants.vue')
+  },
+  {
+    path: '/local/:id',
+    name: 'Local',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Local.vue')
   }
 ];
 

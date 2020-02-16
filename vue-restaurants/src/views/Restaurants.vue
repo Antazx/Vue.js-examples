@@ -24,7 +24,7 @@
         max="10"
         min="0"
         class="form-control my-2"
-        placeholder="Puntuación"
+        value="5"
         v-model="restaurante.totalScore"
       />
       <input
@@ -38,28 +38,18 @@
       >
     </form>
 
-    <table class="table mt-5">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Puntuación</th>
-          <th scope="col">Descripcion</th>
-          <th scope="col">*</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in restaurants" :key="index">
-          <th scope="row">{{ index + 1 }}</th>
-          <td>{{ item.name }}</td>
-          <td>{{ item.totalScore }}</td>
-          <td>{{ item.description }}</td>
-          <td>
-            <b-button class="btn-danger" @click="alerta()">Borrar</b-button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <b-table hover :items="restaurants" :fields="fields" head-variant="light">
+      <template v-slot:cell(actions)="row">
+        <b-button
+          class="btn-info btn-sm mr-1"
+          @click="editRestaurant(row.item._id)"
+          >Editar</b-button
+        >
+        <b-button class="btn-danger btn-sm" @click="delRestaurant(row.item._id)"
+          >Borrar</b-button
+        >
+      </template>
+    </b-table>
   </div>
 </template>
 <script>
@@ -70,7 +60,8 @@ export default {
       fields: [
         { key: "name", sortable: true },
         { key: "totalScore", sortable: true },
-        { key: "description", sortable: false }
+        { key: "description", sortable: false },
+        { key: "actions", sortable: false }
       ],
       dismissSecs: 5,
       dismissCountDown: 0,
@@ -102,21 +93,47 @@ export default {
       this.axios
         .post("/new-restaurant", this.restaurante)
         .then(res => {
-          console.log("res.data", res.data.restaurantDB);
           this.restaurants.push(res.data.restaurantDB);
           this.restaurante.name = "";
           this.restaurante.description = "";
           this.restaurante.totalScore = 0;
-          this.mensaje.texto = "Se ha añadido el restaurante";
+          this.mensaje.texto = "Restaurante añadido!";
           this.mensaje.color = "success";
           this.showAlert();
         })
         .catch(e => {
-          this.mensaje.texto =
-            "Se ha producido un error al añadir el restaurante";
+          if (e.response.data.error.errors.name) {
+            this.mensaje.texto = e.response.data.error.errors.name.message;
+          } else if (e.response.data.error.errors.totalScore) {
+            this.mensaje.texto =
+              e.response.data.error.errors.totalScore.message;
+          } else {
+            this.mensaje.texto = "Error al añadir el restaurante :(";
+          }
           this.mensaje.color = "danger";
           this.showAlert();
         });
+    },
+    delRestaurant(id) {
+      this.axios
+        .delete(`/restaurant/${id}`)
+        .then(res => {
+          let index = this.restaurants.findIndex(
+            item => item._id === res.data.restaurantDB._id
+          );
+
+          this.restaurants.splice(index, 1);
+          this.mensaje.texto = "Restaurante eliminado.";
+          this.mensaje.color = "success";
+          this.showAlert();
+        })
+        .catch(e => {
+          console.log(e.response);
+        });
+    },
+    editRestaurant(id) {
+      this.$router.push(`/local/${id}`);
+      console.log(id);
     },
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
