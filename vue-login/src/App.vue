@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <v-content>
-      <HelloWorld />
       <Login />
     </v-content>
   </v-app>
